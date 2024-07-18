@@ -4,11 +4,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+//create plugin instance and initialize
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   static Future init() async {
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    //initialization settings can be copied over from pub dev for flutter local notifications
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final DarwinInitializationSettings initializationSettingsDarwin =
@@ -23,10 +25,11 @@ class HomePage extends StatelessWidget {
             iOS: initializationSettingsDarwin,
             linux: initializationSettingsLinux);
     _flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: (details) => null);
+        onDidReceiveNotificationResponse: (details) =>
+            null); //set iOS to null if you are testing on android
   }
 
-//funciton ot test notification
+//funciton to test notification, can be copied over from pubdev
   static Future testnotification() async {
     print('Simple notification triggered');
     const AndroidNotificationDetails androidNotificationDetails =
@@ -37,7 +40,7 @@ class HomePage extends StatelessWidget {
             ticker: 'ticker');
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-   
+
     await _flutterLocalNotificationsPlugin.show(0, 'Simple notification',
         'Notification has no repeat interval', notificationDetails,
         payload: 'payload');
@@ -55,16 +58,13 @@ class HomePage extends StatelessWidget {
         NotificationDetails(android: androidNotificationDetails);
 
 //repeat interval is a type of its own
-    await _flutterLocalNotificationsPlugin.periodicallyShow(
-        1,
-        'Periodic Notification',
-        'Repeat interval',
-        RepeatInterval.everyMinute,
-        notificationDetails,
-        payload: 'payload').catchError((error) {
+    await _flutterLocalNotificationsPlugin
+        .periodicallyShow(1, 'Periodic Notification', 'Repeat interval',
+            RepeatInterval.everyMinute, notificationDetails,
+            payload: 'payload')
+        .catchError((error) {
       print('Error showing periodic notification: $error');
     });
-  
   }
 
   @override

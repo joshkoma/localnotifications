@@ -6,6 +6,7 @@ void main() async {
   await HomePage.init(); //initialize inside main function
 
   runApp(const MyApp());
+  
 }
 
 class MyApp extends StatelessWidget {

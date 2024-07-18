@@ -1,0 +1,43 @@
+NOTE: THIS PROJECT RUNS ON KOTLIN VER 1.7.X WHICH STILL INCLUDES BULDSCRIPT.  IF YOU UPGRADE TO A PROJECT THAT USERS A NEWER VERSION OF FLUTTER, THEN YOU WILL 
+NEED TO GO TO ANDROID/SETTINGS.GRADLE, UNDER PLUGINS, FIND id "org.jetbrains.kotlin.android" version "1.7.10" apply false AND CHANGE TO VERSION 1.9.0
+According to stack overflow https://stackoverflow.com/questions/70938297/how-to-add-classpath-in-new-version-of-android-studio you can manually add the buildscript block in the 
+project level gradle and also top level gradle
+EXAMPLE
+If this was your old buildscript
+Buildscript {
+     // ...
+
+     dependencies {
+         // ...
+-        classpath "com.google.gms:google-services:4.4.0"
+-        classpath "com.google.firebase:firebase-crashlytics-gradle:2.9.9"
+     }
+ }
+ Remove these two lines from app level build.gradle
+ -apply plugin: 'com.google.gms.google-services'
+-apply plugin: 'com.google.firebase.crashlytics'
+
+add this to top level settings.gradle
++    id "com.google.gms.google-services" version "4.4.0" apply false
++    id "com.google.firebase.crashlytics" version "2.9.9" apply false
+
+add this to app build.gradle
++    id "com.google.gms.google-services"
++    id "com.google.firebase.crashlytics"
+
+STEP 1: 
+import Packages: Add Packages to pubspec.yaml which include 
+flutter local notifications
+flutter time zone
+rxdart
+
+STEP 2: 
+update build.gradle
+-add multixex enabled in build.gradle, this can be found in the pubdev page for fln
+-add core library under compileOptions
+-add core library under dependencies as well
+-add classpath under main build.gradle
+
+STEP 3
+-add initialization block
+

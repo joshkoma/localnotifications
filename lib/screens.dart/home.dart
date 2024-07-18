@@ -26,21 +26,46 @@ class HomePage extends StatelessWidget {
         onDidReceiveNotificationResponse: (details) => null);
   }
 
-//funciton ot test notification 
-  static Future testnotification(
-     ) async {
-        const AndroidNotificationDetails androidNotificationDetails =
-    AndroidNotificationDetails('your channel id', 'your channel name',
-        channelDescription: 'your channel description',
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'ticker');
-const NotificationDetails notificationDetails =
-    NotificationDetails(android: androidNotificationDetails);
-await _flutterLocalNotificationsPlugin.show(
-    0, 'title', 'body', notificationDetails,
-    payload: 'payload');
-      }
+//funciton ot test notification
+  static Future testnotification() async {
+    print('Simple notification triggered');
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails('your channel id', 'your channel name',
+            channelDescription: 'your channel description',
+            importance: Importance.max,
+            priority: Priority.high,
+            ticker: 'ticker');
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
+   
+    await _flutterLocalNotificationsPlugin.show(0, 'Simple notification',
+        'Notification has no repeat interval', notificationDetails,
+        payload: 'payload');
+  }
+
+  static Future showPeriodicNotifications() async {
+    print('Periodic notification triggered');
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails('test 2', 'Test 2 title',
+            channelDescription: 'Test 2 description',
+            importance: Importance.max,
+            priority: Priority.high,
+            ticker: 'ticker');
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
+
+//repeat interval is a type of its own
+    await _flutterLocalNotificationsPlugin.periodicallyShow(
+        1,
+        'Periodic Notification',
+        'Repeat interval',
+        RepeatInterval.everyMinute,
+        notificationDetails,
+        payload: 'payload').catchError((error) {
+      print('Error showing periodic notification: $error');
+    });
+  
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +75,18 @@ await _flutterLocalNotificationsPlugin.show(
           backgroundColor: Colors.lightBlue,
           title: Text('Notifications'),
         ),
-        body: Expanded(child: Column(
-          children: [
-            ElevatedButton(onPressed: testnotification, child: Text('Test Notification'))
-          ],
-        ),),
+        body: Expanded(
+          child: Column(
+            children: [
+              ElevatedButton(
+                  onPressed: testnotification,
+                  child: Text('Test Notification')),
+              ElevatedButton(
+                  onPressed: showPeriodicNotifications,
+                  child: Text('Periodic Notification'))
+            ],
+          ),
+        ),
       ),
     );
   }
